@@ -32,7 +32,7 @@ EMBEDDING_MODEL_NAME = 'GanymedeNil/text2vec-large-chinese'
 #   THUDM/chatglm-6b-int4
 #   THUDM/chatglm-6b-int8
 #   THUDM/chatglm-6b
-LLM_MODEL = '/home/sleepy/Development/huggingface/modules/transformers_modules/THUDM/chatglm-6b-int8'
+LLM_MODEL = 'THUDM/chatglm-6b-int8'
 
 PROMPT_TEMPLATE = """已知信息：
 {context} 
