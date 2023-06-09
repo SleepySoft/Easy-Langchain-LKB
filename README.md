@@ -4,13 +4,13 @@ The simplest Local Knowledge Base example based on Langchain and Chat-GLM
 
 # 起因
 
-之前langchain-ChatGLM比较火，我也尝试过使用它建立本地知识库。但是这个知识库往往进行不了几轮对话就爆显存了（4070 12G，模型int8优化）。
+之前Langchain-ChatGLM比较火，我也尝试过使用它建立本地知识库。但是这个知识库往往进行不了几轮对话就爆显存了（4070 12G，模型int8优化）。
 
 我想寻找原因，但这个项目的代码风格实在一言难尽。无奈只能自己研究，分析代码，并且写了一个仅包含必要代码的最小实现，以便排除干扰进行性能调优，并且供有同样爱好的同志们参考。
 
 # 相关文章
 
-TODO: 我会在B乎上写一篇文章介绍其原理和里面的一些细节，待填坑。
+https://zhuanlan.zhihu.com/p/635661366
 
 # 使用
 

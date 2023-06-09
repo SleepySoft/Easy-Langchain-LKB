@@ -11,9 +11,20 @@ from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from transformers import AutoModel, AutoTokenizer
 
 
+#
+# 配合此文阅读代码，效果更佳：https://zhuanlan.zhihu.com/p/635661366
+#
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+# 查询向量数据库返回结果的最大数量
 TOP_K = 5
 
+# 要转换的文档，程序中只使用了TextLoader。
+# LangChain还支持其它类型的文档，打开langchain.document_loaders即可看到。
 DOCUMENT_NAME = 'document.txt'
+
+# 向量数据库和文档映射的保存路径，供FAISS这个类使用。
 VECTOR_STORE_PATH = 'vector_store'
 
 # Could be cuda or cpu or other torch supported devices
@@ -42,6 +53,20 @@ PROMPT_TEMPLATE = """已知信息：
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+
+#
+# 用来将文档分割成段落，不同的分割方法理论上效果会有差别。这段代码由NewBing生成，不需要细看。生成的Prompts如下：
+#
+#   用python写一个函数：document_spliter(text: str, threshold: int) -> [str]。
+#   要求：传入任意长度的文本(主要考虑英文和中文)，将整个文本按割并返回。这里句子的定义是：
+#   1.首先按照换行划分段落，如果段落长度小于等于threshold，则不做进一步处理
+#   2.如果段落长度大于threshold，则需要将该段落进一步划分，使得划分后的内容长度不大于threshold。划分的依据如下：
+#
+#   2.1 被成对符号包围的内容尽量不分割，成对符号包括各种引号和各种括号（圆括号，方括号，尖括号，花括号，书名号。）
+#   2.2 逗号和分号不能作为句子划分的依据，只有句号，问号感叹号等强符号才能标识句子完结
+#   2.3 考虑全角和半角符号
+#   2.4 如果按上述方法分割的句子长度还是大于threshold，则尽量平均分割到threshold长度以下
+#
 
 class DocumentTextSplitter(CharacterTextSplitter):
     def __init__(self, threshold: int, **kwargs):
@@ -84,6 +109,8 @@ class DocumentTextSplitter(CharacterTextSplitter):
                         result.append(paragraph[start:].strip())
         return result
 
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 def file_to_document(file_name) -> list:
     loader = TextLoader(file_name, autodetect_encoding=True)
@@ -195,23 +222,12 @@ def main():
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-def exception_hook(_type, value, tback):
-    # log the exception here
-    print('Exception hook triggered.')
-    print(_type)
-    print(value)
-    print(tback)
-    # then call the default handler
-    sys.__excepthook__(_type, value, tback)
-
-
 if __name__ == "__main__":
-    sys.excepthook = exception_hook
     try:
         main()
     except Exception as e:
-        print('Error =>', e)
-        print('Error =>', traceback.format_exc())
+        print(e)
+        print(traceback.format_exc())
         exit()
     finally:
         pass
