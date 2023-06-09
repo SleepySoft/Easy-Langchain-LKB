@@ -212,8 +212,9 @@ def main():
             prompts,
             history=history,
             max_length=10000,
-            temperature=5.0
+            temperature=2.0
         )
+        torch.cuda.empty_cache()
 
         # history += [[prompts, response]]
 
